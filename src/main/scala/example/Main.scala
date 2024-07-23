@@ -6,15 +6,19 @@ import com.raquo.laminar.receivers.ChildReceiver.text
 import example.styles.GlobalStyles
 import org.scalajs.dom
 import org.scalajs.dom.document
+import scalacss.ProdDefaults.*
 import scalacss.StyleA
-import scala.language.implicitConversions
+import scalacss.internal.mutable.GlobalRegistry
 
+//import scala.language.implicitConversions
 
 @main
 def helloWorld(): Unit =
+  GlobalRegistry.addToDocumentOnRegistration()
+  GlobalRegistry.register(GlobalStyles)
 
-  implicit def applyStyle(styleA: StyleA): Mod[HtmlElement] =
-    cls := styleA.className.value
+//  implicit def applyStyle(styleA: StyleA): Mod[HtmlElement] =
+//    cls := styleA.className.value
 
   val tickStream = EventStream.periodic(10)
   val harvDiv = div("harvey is a div")
@@ -38,7 +42,7 @@ def helloWorld(): Unit =
     ),
     onClick --> println("Button clicked!")
   )
-  val headerText = div("This is Header PAM PAM", GlobalStyles.header)
+  val headerText = div("This is Header PAM PAM", cls := GlobalStyles.header.className.value)
   val nameVar = Var(initial = "world")
   def renderMultiLineString(): HtmlElement = {
     val multiLineString =
@@ -77,7 +81,6 @@ def helloWorld(): Unit =
     div(
       headerText,
       div(
-        GlobalStyles.header,
         h1("Making UIs!!!", cls := "home-div"),
         h2("Scala.js compiles Scala code into JavaScript.🤓🤓😜🧐🥸"),
         hr(),
@@ -93,7 +96,9 @@ def helloWorld(): Unit =
           alt := "Scala logo",
           widthAttr := 100,
           heightAttr := 100,
-          styleAttr <-- tickStream.map(tick => s"filter: hue-rotate(${tick}deg); transform: translate(${Math.cos(tick / 33.0) * 180}px, ${Math.sin(tick / 99.0) * 100}px) rotate(${tick}deg)")
+          styleAttr <-- tickStream.map(tick =>
+            s"filter: hue-rotate(${tick}deg); transform: translate(${Math.cos(
+                tick / 33.0) * 180}px, ${Math.sin(tick / 99.0) * 100}px) rotate(${tick}deg)")
         ),
         div(
           label("Your name: "),
@@ -108,7 +113,7 @@ def helloWorld(): Unit =
         ),
         button1,
         h3("Pink hairbrush 30cm🤨")
-      ))
-
+      )
+    )
 
 end helloWorld
