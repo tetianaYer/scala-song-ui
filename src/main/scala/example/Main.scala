@@ -16,7 +16,7 @@ def helloWorld(): Unit =
   implicit def applyStyle(styleA: StyleA): Mod[HtmlElement] =
     cls := styleA.className.value
 
-  val tickStream = EventStream.periodic(100)
+  val tickStream = EventStream.periodic(10)
   val harvDiv = div("harvey is a div")
 
   val genericButton = button(
@@ -29,6 +29,7 @@ def helloWorld(): Unit =
     onClick -->
       println("Who said you could push me fool")
   )
+
   val button1 = button(
     cls := "button",
     span(
@@ -90,9 +91,9 @@ def helloWorld(): Unit =
         img(
           src := "https://www.scala-js.org/assets/img/scala-js-logo.svg",
           alt := "Scala logo",
-          width := "130px",
-          transform <-- tickStream.map(tick => s"translate(${Math.cos(tick/10.0) * 500}px, ${Math.sin(tick/5.0) * 150}px) rotate(${tick*5}deg)"),
-          //        filter <-- tickStream.map(tick => s"hue-rotate(${tick*10}deg)")
+          widthAttr := 100,
+          heightAttr := 100,
+          styleAttr <-- tickStream.map(tick => s"filter: hue-rotate(${tick}deg); transform: translate(${Math.cos(tick / 33.0) * 180}px, ${Math.sin(tick / 99.0) * 100}px) rotate(${tick}deg)")
         ),
         div(
           label("Your name: "),
