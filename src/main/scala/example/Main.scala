@@ -4,32 +4,37 @@ import com.raquo.laminar.api.L.{*, given}
 import com.raquo.laminar.api.features.unitArrows
 import com.raquo.laminar.receivers.ChildReceiver.text
 import example.styles.GlobalStyles
+import org.scalajs.dom.window
 import org.scalajs.dom
 import org.scalajs.dom.document
 import scalacss.ProdDefaults.*
 import scalacss.StyleA
 import scalacss.internal.mutable.GlobalRegistry
-
-//import scala.language.implicitConversions
+import scala.language.implicitConversions
 
 @main
 def helloWorld(): Unit =
   GlobalRegistry.addToDocumentOnRegistration()
   GlobalRegistry.register(GlobalStyles)
 
-//  implicit def applyStyle(styleA: StyleA): Mod[HtmlElement] =
-//    cls := styleA.className.value
+  extension (style: StyleA)
+    def toClassName: Mod[HtmlElement] = className := style.className.value
+
+  given Conversion[StyleA, Mod[HtmlElement]] =
+    (styleA: StyleA) => className := styleA.className.value
 
   val tickStream = EventStream.periodic(10)
-  val harvDiv = div("harvey is a div")
+  val harvDev = div("harvey is a dev.. but a nice dev")
 
   val genericButton = button(
-    cls := "button",
+    className := "button",
+
     //              styleAttr := "--clr:#03FF3C",
     span(
       cls := "button-text",
       "►"
     ),
+    idAttr := "i-am " + "-the id",
     onClick -->
       println("Who said you could push me fool")
   )
@@ -42,8 +47,21 @@ def helloWorld(): Unit =
     ),
     onClick --> println("Button clicked!")
   )
-  val headerText = div("This is Header PAM PAM", cls := GlobalStyles.header.className.value)
+
+  val ArranIsButtingOn = button(
+    className := GlobalStyles.button53.className.value,
+    idAttr := "Arran-button",
+    span(
+      cls := "Butt-on",
+      "Arran-Why"
+    ),
+    onClick --> println("AAAAA YOU BROKE IT AAAAA!!"),
+    onClick --> window.alert("ello")
+  )
+  val headerText = div("This is Header PAM PAM", GlobalStyles.header.toClassName)
   val nameVar = Var(initial = "world")
+  val scalaJs2 =
+    div("generating ascii art...", GlobalStyles.terminal)
   def renderMultiLineString(): HtmlElement = {
     val multiLineString =
       """          _____                    _____                    _____                    _____            _____                            _____                    _____
@@ -85,11 +103,13 @@ def helloWorld(): Unit =
         h2("Scala.js compiles Scala code into JavaScript.🤓🤓😜🧐🥸"),
         hr(),
         h1("Hello with Vite & Laminar!"),
-        harvDiv,
+        harvDev,
         hr(),
         p("test2", cls := "cheese"),
         genericButton,
+        ArranIsButtingOn,
         hr(),
+        scalaJs2,
         renderMultiLineString(),
         img(
           src := "https://www.scala-js.org/assets/img/scala-js-logo.svg",
@@ -100,9 +120,14 @@ def helloWorld(): Unit =
             s"filter: hue-rotate(${tick}deg); transform: translate(${Math.cos(
                 tick / 33.0) * 180}px, ${Math.sin(tick / 99.0) * 100}px) rotate(${tick}deg)")
         ),
+        img(
+          src := "https://www.scala-js.org/assets/img/scala-js-logo.svg",
+          GlobalStyles.harvAnim
+        ),
         div(
           label("Your name: "),
           input(
+            GlobalStyles.sun,
             placeholder := "Enter your name here",
             onInput.mapToValue --> nameVar
           ),
@@ -112,8 +137,12 @@ def helloWorld(): Unit =
           )
         ),
         button1,
-        h3("Pink hairbrush 30cm🤨")
+        div(
+          p("isabella", cls := GlobalStyles.book.className.value)
+        ),
+        h2("Computer", cls := GlobalStyles.sky.className.value)
       )
     )
+    //     className := GlobalStyles.{insert style name here}.className.value,
 
 end helloWorld
