@@ -4,12 +4,12 @@ import com.raquo.laminar.api.L.{*, given}
 import com.raquo.laminar.api.features.unitArrows
 import com.raquo.laminar.receivers.ChildReceiver.text
 import example.styles.GlobalStyles
-import org.scalajs.dom.window
 import org.scalajs.dom
-import org.scalajs.dom.document
+import org.scalajs.dom.{document, window}
 import scalacss.ProdDefaults.*
 import scalacss.StyleA
 import scalacss.internal.mutable.GlobalRegistry
+
 import scala.language.implicitConversions
 
 @main
@@ -24,6 +24,180 @@ def helloWorld(): Unit =
     (styleA: StyleA) => className := styleA.className.value
 
   val tickStream = EventStream.periodic(10)
+
+  ///// HERE ///
+
+
+  val songListDatabase = div(
+    "Song List Database",
+    div (
+      GlobalStyles.songName,
+      p("Song1Name"), p("Song2Name"), p("Song3Name"), p("Song4Name"), p("Song5Name"), p("Song6Name")
+    ),
+    div (
+      GlobalStyles.songName,
+        p("Song1Artist"), p("Song2Artist"), p("Song3Artist"), p("Song4Artist"), p("Song5Artist"), p("Song6Artist")
+    ),
+    div (
+      GlobalStyles.songName,
+      p("Song1Genre"), p("Song2Genre"), p("Song3Genre"), p("Song4Genre"), p("Song5Genre"), p("Song6Genre")
+    ),
+  GlobalStyles.songListDatabase
+
+)
+
+
+  val users = div(
+    h3("Users"),
+    GlobalStyles.users,
+    div(
+      p("User1"),
+      p("User2"),
+      div(
+        button(
+          GlobalStyles.ctaButton,
+          span(
+            cls := "button-text",
+            "delete user"
+          ),
+          onClick --> println("DELETE!!")
+        )
+      )
+    )
+  )
+  val addCreateSong = div(
+    GlobalStyles.pageContainer,
+    div(GlobalStyles.topPanel,
+    div(
+      GlobalStyles.addSong,
+      h3("Add song"),
+      p(
+      label("Song title: "),
+      input(
+        GlobalStyles.inputField,
+        placeholder := "Enter song title"
+//        onInput.mapToValue --> nameVar
+      )
+      ),
+      p(
+      label("Artist: "),
+      input(
+        GlobalStyles.inputField,
+        placeholder := "Enter artist name"
+//        onInput.mapToValue --> nameVar
+      )
+      ),
+      p(
+      label("Duration: "),
+      input(
+        GlobalStyles.inputField,
+        placeholder := "Enter song duration"
+//        onInput.mapToValue --> nameVar
+      )
+      ),
+      button(
+        GlobalStyles.ctaButton,
+        span(
+          cls := "button-text",
+          "Add song"
+        ),
+        onClick --> println("Button clicked!")
+      )
+    ),
+    div(
+      h3("Add user"),
+    GlobalStyles.addSong,
+      p(
+        label("User name: "),
+        input(
+          GlobalStyles.inputField,
+          placeholder := "Enter user's name"
+          //        onInput.mapToValue --> nameVar
+        )
+      ),
+      p(
+        label("Age: "),
+        input(
+          GlobalStyles.inputField,
+          placeholder := "Enter user's age"
+          //        onInput.mapToValue --> nameVar
+        )
+      ),
+      p(
+        label("Favorite song: "),
+        input(
+          GlobalStyles.inputField,
+          placeholder := "Enter user's favorite song"
+          //        onInput.mapToValue --> nameVar
+        )
+      ),
+      button(
+        GlobalStyles.ctaButton,
+        span(
+          cls := "button-text",
+          "Add user"
+        ),
+        onClick --> println("Button clicked!")
+      ))
+    ),
+    users
+  )
+
+  val userList = div(
+    p("Users:"),
+    GlobalStyles.userlist,
+    div(
+      p("User1"),
+      p("User2"),
+      div(
+        button(
+          GlobalStyles.delete,
+          span(
+            cls := "button-text",
+            "delete user"
+          ),
+          onClick --> println("DELETE!!")
+        )
+      )
+    )
+  )
+  val user = div(
+    GlobalStyles.userlist,
+    div(
+      p("UserName"),
+      button(
+        GlobalStyles.delete,
+        span(
+          cls := "button-text",
+          "delete user"
+        ),
+        onClick --> println("DELETE!!")
+      )
+    )
+  )
+
+  def appElement(): HtmlElement =
+    div(
+      GlobalStyles.pageContainer,
+      div(
+        GlobalStyles.topPanel,
+        idAttr := "app-container",songListDatabase,
+        addCreateSong),
+      div( userList)
+
+    )
+
+
+
+
+  renderOnDomContentLoaded(dom.document.querySelector("#app"), appElement())
+
+
+  /// END //////
+
+
+
+
   val harvDev = div("harvey is a dev.. but a nice dev")
 
   val genericButton = button(
@@ -93,9 +267,9 @@ def helloWorld(): Unit =
     )
   }
 
-  renderOnDomContentLoaded(dom.document.querySelector("#app"), appElement())
 
-  def appElement(): HtmlElement =
+
+  def appElement2(): HtmlElement =
     div(
       headerText,
       div(
@@ -118,7 +292,7 @@ def helloWorld(): Unit =
           heightAttr := 100,
           styleAttr <-- tickStream.map(tick =>
             s"filter: hue-rotate(${tick}deg); transform: translate(${Math.cos(
-                tick / 33.0) * 180}px, ${Math.sin(tick / 99.0) * 100}px) rotate(${tick}deg)")
+              tick / 33.0) * 180}px, ${Math.sin(tick / 99.0) * 100}px) rotate(${tick}deg)")
         ),
         img(
           src := "https://www.scala-js.org/assets/img/scala-js-logo.svg",
@@ -143,6 +317,6 @@ def helloWorld(): Unit =
         h2("Computer", cls := GlobalStyles.sky.className.value)
       )
     )
-    //     className := GlobalStyles.{insert style name here}.className.value,
+//     className := GlobalStyles.{insert style name here}.className.value,
 
 end helloWorld

@@ -13,6 +13,42 @@ object GlobalStyles extends StyleSheet.Inline {
 
 //  implicit def applyStyle(styleA: StyleA): Mod[HtmlElement] =
 //    cls(styleA.className.value)
+//
+  val songListDatabase: StyleA = style("songListDatabase") (
+    backgroundColor.lightgray,
+    width(30%%),
+    borderRadius(2.em),
+    display.flex,
+    flexDirection.row,
+  )
+
+  val songName: StyleA = style("song-name") (
+    margin(10px, 10px)
+  )
+
+  val controlPanel: StyleA = style("control-panel") (
+    backgroundColor.grey,
+    width(70%%),
+    display.flex,
+    flexDirection.row,
+    borderRadius(2.em)
+  )
+
+  val pageContainer: StyleA = style("page-container")(
+    display.flex,
+    flexDirection.column,
+    padding(2.em, 2.em),
+    width(100%%),
+)
+
+  val topPanel: StyleA = style("top-panel")(
+  backgroundColor.beige,
+    display.flex,
+    flexDirection.row,
+    padding(1.rem, 1.em),
+    borderColor.black,
+    borderRadius(1.em)
+)
 
   val header: StyleA = style("header")(
     color.pink,
@@ -22,6 +58,22 @@ object GlobalStyles extends StyleSheet.Inline {
     backgroundImage := "radial-gradient(5em circle at top left, yellow, blue)",
     fontFamily.attr := "cursive"
   )
+
+  val userlist: StyleA = style("userlist")(
+    color.white,
+    backgroundColor.grey,
+    fontSize(20 px),
+    border.white
+  )
+  val delete: StyleA = style("delete")(
+    color.black,
+    backgroundColor.orange,
+    fontSize(16 px),
+    border.orange,
+    fontStyle.normal,
+    fontWeight.bold,
+  )
+
 
   val sky: StyleA = style("sky")(
     color.white,
@@ -36,6 +88,45 @@ object GlobalStyles extends StyleSheet.Inline {
     border.cornflowerblue,
     fontSize(18 px)
   )
+
+  val inputField: StyleA = style("input-field")(
+    color.white,
+    fontSize(18 px)
+  )
+
+  val addSong: StyleA = style("add-song")(
+    color.black,
+    backgroundColor.lightyellow,
+    fontSize(18 px),
+//    border(2.px),
+//    borderWidth(10.em),
+    borderColor.black,
+    width(50%%),
+    justifyContent.left,
+    borderRadius(2.em),
+    paddingRight(5.em)
+  )
+
+  val users: StyleA = style("users")(
+    color.black,
+    backgroundColor.lightblue,
+    fontSize(18 px),
+    borderColor.black,
+    width(100%%),
+    justifyContent.left,
+    borderRadius(2.em)
+  )
+
+  val ctaButton: StyleA = style("cta-button")(
+    color.black,
+    backgroundColor.lightgreen,
+    borderColor.green,
+    borderRadius(1.em),
+    fontSize(20 px),
+    fontStyle.normal,
+    fontWeight.bold,
+  )
+
   val myAnimation = keyframes(
     0.%% -> keyframe(color.blue),
     50.%% -> keyframe(color.yellow),
