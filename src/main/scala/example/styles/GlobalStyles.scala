@@ -11,15 +11,10 @@ object GlobalStyles extends StyleSheet.Inline {
 
   import dsl.*
 
-//  implicit def applyStyle(styleA: StyleA): Mod[HtmlElement] =
-//    cls(styleA.className.value)
-//
   val songListDatabase: StyleA = style("songListDatabase") (
     backgroundColor.lightgray,
-    width(30%%),
-    borderRadius(2.em),
-    display.flex,
-    flexDirection.row,
+    width(100%%),
+    borderRadius(1.em),
   )
 
   val songName: StyleA = style("song-name") (
@@ -37,19 +32,19 @@ object GlobalStyles extends StyleSheet.Inline {
   val pageContainer: StyleA = style("page-container")(
     display.flex,
     flexDirection.column,
-    padding(2.em, 2.em),
+    padding(1.em, 1.em),
     width(100%%),
     justifyContent.center,
 )
 
   val topPanel: StyleA = style("top-panel")(
-  backgroundColor.beige,
+    backgroundColor.beige,
     display.flex,
     flexDirection.row,
     padding(1.rem, 1.em),
     borderColor.black,
     borderRadius(1.em)
-)
+  )
 
   val header: StyleA = style("header")(
     color.pink,
@@ -63,17 +58,22 @@ object GlobalStyles extends StyleSheet.Inline {
   val userlist: StyleA = style("userlist")(
     color.white,
     backgroundColor.grey,
-    fontSize(20 px),
-    padding(1.em, 2.em),
+//    fontSize(20 px),
+//    padding(1.em, 2.em),
     width(100%%),
+    borderRadius(1.em),
   )
 
-  val userRow1: StyleA = style("userRow1")(
+  val userTableTextStyle: StyleA = style("userTableTextStyle")(
     color.black,
     fontSize(20 px),
-    paddingRight(10.em),
-    display.flex,
-    flexDirection.row,
+    paddingRight(10.em)
+  )
+
+  val songTableTextStyle: StyleA = style("songTableTextStyle")(
+    color.black,
+    paddingRight(1.em),
+    padding(0.001.em, 0.1.em),
   )
 
   val horizontal: StyleA = style("horizontal")(
@@ -81,7 +81,18 @@ object GlobalStyles extends StyleSheet.Inline {
     flexDirection.row,
   )
 
+  val vertical: StyleA = style("vertical")(
+    display.flex,
+    flexDirection.column,
+  )
+
   val toTheLeft: StyleA = style("toTheLeft")(
+    justifyContent.left,
+  )
+
+  val label: StyleA = style("label")(
+    color.black,
+    fontSize(15 px),
     justifyContent.left,
   )
 
@@ -120,20 +131,27 @@ object GlobalStyles extends StyleSheet.Inline {
 
   val inputField: StyleA = style("input-field")(
     color.white,
-    fontSize(18 px)
+    fontSize(18 px),
+    width(80%%),
+    padding(0.5.rem, 0.5.rem),
   )
 
-  val addSong: StyleA = style("add-song")(
+  val addSongUserBoard: StyleA = style("addSongUserBoardg")(
     color.black,
     backgroundColor.lightyellow,
     fontSize(18 px),
-//    border(2.px),
-//    borderWidth(10.em),
     borderColor.black,
-    width(50%%),
-    justifyContent.left,
-    borderRadius(2.em),
-    paddingRight(5.em)
+    width(100%%),
+    justifyContent.center,
+    borderRadius(1.em),
+  )
+
+  val addSongUserForm: StyleA = style("addSongUserForm")(
+    color.black,
+    fontSize(15 px),
+    width(100%%),
+    padding(1.rem, 1.rem),
+    borderRadius(1.em),
   )
 
   val users: StyleA = style("users")(
@@ -149,7 +167,7 @@ object GlobalStyles extends StyleSheet.Inline {
   val userRow: StyleA = style("userRow")(
     color.black,
     backgroundColor.white,
-    fontSize(18 px),
+//    fontSize(10 px),
     borderColor.black,
     borderWidth(1.px),
     borderStyle.solid,
@@ -158,10 +176,11 @@ object GlobalStyles extends StyleSheet.Inline {
     padding(1.rem, 1.rem),
     boxSizing.borderBox,
     borderRadius(1.em),
+    height(3.em),
   )
 
   val userPadding: StyleA = style("userPadding")(
-    padding(0.5.rem, 0.5.rem),
+    padding(0.1.rem, 0.3.rem),
   )
 
   val userRowPadding: StyleA = style("userRowPadding")(
