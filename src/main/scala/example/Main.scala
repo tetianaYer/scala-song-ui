@@ -46,25 +46,40 @@ def helloWorld(): Unit =
 
 )
 
+  def deleteUser() = button(
+    GlobalStyles.delete,
+    span(
+      cls := "button-text",
+      "Delete user"
+    ),
+    onClick --> println("DELETE!!")
+  )
 
-  val users = div(
-    h3("Users"),
-    GlobalStyles.users,
-    div(
-      p("User1"),
-      p("User2"),
-      div(
-        button(
-          GlobalStyles.ctaButton,
-          span(
-            cls := "button-text",
-            "delete user"
-          ),
-          onClick --> println("DELETE!!")
+  def userTable(name: String) = div(GlobalStyles.userPadding,
+    table( GlobalStyles.userRow, GlobalStyles.userPadding,
+      tbody(
+        tr( GlobalStyles.userRow,
+          td(p(s"$name"), GlobalStyles.userRow1, GlobalStyles.toTheLeft),
+          td(GlobalStyles.toTheRight, GlobalStyles.columnWidth,
+            deleteUser()
+            )
         )
       )
     )
   )
+
+  val userList = div(
+    h3("Users:"),
+    GlobalStyles.userlist,
+    div(
+      userTable("Taylor Swift"),
+      userTable("Harry Potter"),
+      userTable("Tetiana"),
+      userTable("Table user")
+    )
+  )
+
+
   val addCreateSong = div(
     GlobalStyles.pageContainer,
     div(GlobalStyles.topPanel,
@@ -140,41 +155,9 @@ def helloWorld(): Unit =
         onClick --> println("Button clicked!")
       ))
     ),
-    users
+    userList
   )
 
-  val userList = div(
-    p("Users:"),
-    GlobalStyles.userlist,
-    div(
-      p("User1"),
-      p("User2"),
-      div(
-        button(
-          GlobalStyles.delete,
-          span(
-            cls := "button-text",
-            "delete user"
-          ),
-          onClick --> println("DELETE!!")
-        )
-      )
-    )
-  )
-  val user = div(
-    GlobalStyles.userlist,
-    div(
-      p("UserName"),
-      button(
-        GlobalStyles.delete,
-        span(
-          cls := "button-text",
-          "delete user"
-        ),
-        onClick --> println("DELETE!!")
-      )
-    )
-  )
 
   def appElement(): HtmlElement =
     div(
@@ -182,9 +165,7 @@ def helloWorld(): Unit =
       div(
         GlobalStyles.topPanel,
         idAttr := "app-container",songListDatabase,
-        addCreateSong),
-      div( userList)
-
+        addCreateSong)
     )
 
 

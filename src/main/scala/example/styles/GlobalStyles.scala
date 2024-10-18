@@ -39,6 +39,7 @@ object GlobalStyles extends StyleSheet.Inline {
     flexDirection.column,
     padding(2.em, 2.em),
     width(100%%),
+    justifyContent.center,
 )
 
   val topPanel: StyleA = style("top-panel")(
@@ -63,15 +64,43 @@ object GlobalStyles extends StyleSheet.Inline {
     color.white,
     backgroundColor.grey,
     fontSize(20 px),
-    border.white
+    padding(1.em, 2.em),
+    width(100%%),
   )
+
+  val userRow1: StyleA = style("userRow1")(
+    color.black,
+    fontSize(20 px),
+    paddingRight(10.em),
+    display.flex,
+    flexDirection.row,
+  )
+
+  val horizontal: StyleA = style("horizontal")(
+    display.flex,
+    flexDirection.row,
+  )
+
+  val toTheLeft: StyleA = style("toTheLeft")(
+    justifyContent.left,
+  )
+
+  val columnWidth: StyleA = style("columnWidth")(
+    width(200px),
+  )
+
+  val toTheRight: StyleA = style("toTheRight")(
+    justifyContent.right,
+  )
+
   val delete: StyleA = style("delete")(
     color.black,
-    backgroundColor.orange,
-    fontSize(16 px),
-    border.orange,
+    backgroundColor.red,
+    fontSize(20 px),
     fontStyle.normal,
     fontWeight.bold,
+    padding(1.rem, 1.rem),
+    borderRadius(1.em),
   )
 
 
@@ -115,6 +144,28 @@ object GlobalStyles extends StyleSheet.Inline {
     width(100%%),
     justifyContent.left,
     borderRadius(2.em)
+  )
+
+  val userRow: StyleA = style("userRow")(
+    color.black,
+    backgroundColor.white,
+    fontSize(18 px),
+    borderColor.black,
+    borderWidth(1.px),
+    borderStyle.solid,
+    width(100%%),
+//    justifyContent.left,
+    padding(1.rem, 1.rem),
+    boxSizing.borderBox,
+    borderRadius(1.em),
+  )
+
+  val userPadding: StyleA = style("userPadding")(
+    padding(0.5.rem, 0.5.rem),
+  )
+
+  val userRowPadding: StyleA = style("userRowPadding")(
+    paddingRight(30.rem),
   )
 
   val ctaButton: StyleA = style("cta-button")(
