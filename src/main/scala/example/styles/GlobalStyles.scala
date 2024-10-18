@@ -17,18 +17,6 @@ object GlobalStyles extends StyleSheet.Inline {
     borderRadius(1.em),
   )
 
-  val songName: StyleA = style("song-name") (
-    margin(10px, 10px)
-  )
-
-  val controlPanel: StyleA = style("control-panel") (
-    backgroundColor.grey,
-    width(70%%),
-    display.flex,
-    flexDirection.row,
-    borderRadius(2.em)
-  )
-
   val pageContainer: StyleA = style("page-container")(
     display.flex,
     flexDirection.column,
@@ -58,8 +46,6 @@ object GlobalStyles extends StyleSheet.Inline {
   val userlist: StyleA = style("userlist")(
     color.white,
     backgroundColor.grey,
-//    fontSize(20 px),
-//    padding(1.em, 2.em),
     width(100%%),
     borderRadius(1.em),
   )
@@ -114,21 +100,6 @@ object GlobalStyles extends StyleSheet.Inline {
     borderRadius(1.em),
   )
 
-
-  val sky: StyleA = style("sky")(
-    color.white,
-    backgroundColor.skyblue,
-    fontSize(24 px),
-    border.blue
-  )
-
-  val book: StyleA = style("book")(
-    color.lightpink,
-    backgroundColor.antiquewhite,
-    border.cornflowerblue,
-    fontSize(18 px)
-  )
-
   val inputField: StyleA = style("input-field")(
     color.white,
     fontSize(18 px),
@@ -154,16 +125,6 @@ object GlobalStyles extends StyleSheet.Inline {
     borderRadius(1.em),
   )
 
-  val users: StyleA = style("users")(
-    color.black,
-    backgroundColor.lightblue,
-    fontSize(18 px),
-    borderColor.black,
-    width(100%%),
-    justifyContent.left,
-    borderRadius(2.em)
-  )
-
   val userRow: StyleA = style("userRow")(
     color.black,
     backgroundColor.white,
@@ -183,103 +144,14 @@ object GlobalStyles extends StyleSheet.Inline {
     padding(0.1.rem, 0.3.rem),
   )
 
-  val userRowPadding: StyleA = style("userRowPadding")(
-    paddingRight(30.rem),
-  )
-
   val ctaButton: StyleA = style("cta-button")(
     color.black,
     backgroundColor.lightgreen,
     borderColor.green,
-    borderRadius(1.em),
+    borderRadius(0.5.em),
     fontSize(20 px),
     fontStyle.normal,
     fontWeight.bold,
-  )
-
-  val myAnimation = keyframes(
-    0.%% -> keyframe(color.blue),
-    50.%% -> keyframe(color.yellow),
-    100.%% -> keyframe(color.green)
-  )
-  val sun: StyleA = style("sun")(
-    color.orangered,
-    backgroundColor.white,
-    fontSize(20 px),
-    animationName(myAnimation),
-    animationDuration(2 seconds),
-    animationIterationCount.infinite
-  )
-
-  val animPartOne = keyframe(
-    height(300 px),
-    width(300 px))
-
-  val animPartTwo = keyframe(
-    height(150 px),
-    width(150 px))
-
-  val kf1 = keyframes(
-    (0 %%) -> animPartOne,
-    (50 %%) -> animPartTwo,
-    (100 %%) -> keyframe(
-      height(300 px),
-      width(300 px))
-  )
-
-  val harvAnim: StyleA = style(
-    animationName(kf1),
-    animationDuration(2 seconds),
-    animationIterationCount.infinite
-  )
-
-  val terminal: StyleA = style("terminal")(
-    color.white,
-    backgroundColor.black,
-    fontSize(20 px),
-    border.grey
-  )
-
-  val button53 = style(
-    backgroundColor(c"#3DD1E7"),
-    border(0.px, solid, c"#E5E7EB"),
-    boxSizing.borderBox,
-    color.black,
-    display.flex,
-    fontFamily :=! "ui-sans-serif,system-ui,-apple-system,system-ui,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\"",
-    fontSize(1.rem),
-    fontWeight.bold,
-    justifyContent.center,
-    lineHeight(1.75.rem),
-    padding(0.75.rem, 1.65.rem),
-    position.relative,
-    textAlign.center,
-    textDecoration := "none",
-    textDecorationColor.black,
-    width(100 %%),
-    maxWidth(460.px),
-    cursor.pointer,
-    transform := "rotate(-2deg)",
-    userSelect := "none",
-    unsafeChild(":after")(
-      content := "''",
-      position.absolute,
-      border(1.px, solid, c"#000000"),
-      bottom(4.px),
-      left(4.px)
-    ),
-    &.hover(
-      unsafeChild(":after")(
-        bottom(2.px),
-        left(2.px)
-      )
-    ),
-    media.minWidth(768.px)(
-      padding(0.75.rem, 3.rem),
-      fontSize(1.25.rem)
-    ),
-    &.focus(
-      outline := "0"
-    )
+    padding(0.7.rem, 1.rem),
   )
 }
