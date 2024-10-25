@@ -4,7 +4,7 @@ lazy val root = project
   .in(file("."))
   .enablePlugins(ScalaJSPlugin)
   .settings(
-    name := "ui-testing",
+    name := "scala-song-database-ui",
     scalaVersion := "3.3.3",
     scalacOptions ++= Seq("-encoding", "utf-8", "-deprecation", "-feature"),
 
