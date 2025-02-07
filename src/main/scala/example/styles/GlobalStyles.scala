@@ -23,7 +23,7 @@ object GlobalStyles extends StyleSheet.Inline {
     padding(1.em, 1.em),
     width(100%%),
     justifyContent.center,
-)
+  )
 
   val topPanel: StyleA = style("top-panel")(
     backgroundColor.beige,
@@ -101,7 +101,7 @@ object GlobalStyles extends StyleSheet.Inline {
   )
 
   val inputField: StyleA = style("input-field")(
-    color.white,
+    color.black,
     fontSize(18 px),
     width(80%%),
     padding(0.5.rem, 0.5.rem),
@@ -128,12 +128,12 @@ object GlobalStyles extends StyleSheet.Inline {
   val userRow: StyleA = style("userRow")(
     color.black,
     backgroundColor.white,
-//    fontSize(10 px),
+    //    fontSize(10 px),
     borderColor.black,
     borderWidth(1.px),
     borderStyle.solid,
     width(100%%),
-//    justifyContent.left,
+    //    justifyContent.left,
     padding(1.rem, 1.rem),
     boxSizing.borderBox,
     borderRadius(1.em),
