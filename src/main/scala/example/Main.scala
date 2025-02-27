@@ -5,7 +5,7 @@ import com.raquo.airstream.web.FetchOptions
 import com.raquo.laminar.api.L.{*, given}
 import com.raquo.laminar.api.features.unitArrows
 import com.raquo.laminar.receivers.ChildReceiver.text
-import example.models.{Song, SongResponse}
+import example.models.{Song, SongResponse, User}
 import example.styles.GlobalStyles
 import org.scalajs.dom
 import org.scalajs.dom.document
@@ -14,6 +14,7 @@ import scalacss.StyleA
 import scalacss.internal.mutable.GlobalRegistry
 import org.scalajs.dom
 
+import java.util.UUID
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
 import scala.language.implicitConversions
@@ -123,9 +124,7 @@ def helloWorld(): Unit =
   val postSongResp = Var("")
 
   def sendPostRequest(songTitle: String, songDuration: String, artist: String): Binder.Base = {
-    //    val duration: Double = songDuration.toDouble
     val song = Song(songDuration, songTitle, artist)
-    //    val songStub = Song("3.67", "Killer", "Queen")
     println(song)
     val json = upickle.default.write[Song](song)
     println(json)
@@ -153,13 +152,28 @@ def helloWorld(): Unit =
       text
     ),
     onClick.flatMap { _ =>
-      println(songTitle.now())
-      val songStub = Song("3.67", "Killer", "Queen")
       val song = Song(songDuration.now(), songTitle.now(), artist.now())
       val json = upickle.default.write[Song](song)
       FetchStream.post("http://127.0.0.1:8081/v1/songs", _.body(json))
     } --> Observer[String] { responseText =>
       val response: String = upickle.default.read[String](responseText)
+      dom.console.log(response)
+    }
+  )
+
+  def ctaButtonAddUser(text: String, userName: Var[String], age: Var[String], favouriteSong: Var[String]) = button(
+    GlobalStyles.ctaButton,
+    span(
+      cls := "button-text",
+      text
+    ),
+    onClick.flatMap { _ =>
+      val userUuid = UUID.fromString("f6884898-c18d-4ddc-93f7-f691702e6d98").toString
+      val user = User(userUuid, userName.now(), Some(age.now()), Some(favouriteSong.now()))
+      val json = upickle.default.write[User](user)
+      FetchStream.post("http://127.0.0.1:8081/v1/user", _.body(json))
+    } --> Observer[String] { response =>
+//      val response: String = upickle.default.read[String](responseText)
       dom.console.log(response)
     }
   )
@@ -222,51 +236,75 @@ def helloWorld(): Unit =
       p(ctaButtonAddSong("Add song", songVar, songDuration, songArtist))
     )
   )
+  val userVar = Var(User)
+
+  case class UserState(userUuid: String, userName: String, age: String, favouriteSongUuid: String)
+  val userStateVar = Var(UserState("", "", "", ""))
+  //  val titleWriter = formStateVar.updater[String]((currentState, title) => currentState.copy(title = title))
+  //  val artistWriter = formStateVar.updater[String]((currentState, artist) => currentState.copy(artist = artist))
+  //  val durationWriter = formStateVar.updater[String]((currentState, duration) => currentState.copy(duration = duration))
+
+  //  val songTitle = Var("")
+  val userNameVar = userStateVar.zoom(_.userName)((state, userName) => state.copy(userName = userName))
+  val ageVar = Var("")
+  val favouriteSongVar = Var("")
+  //  val submitObserver = Observer[FormState] { state => sendPostRequest(state.title, state.duration, state.artist) }
 
 
-  //  val addSongForm  = div(
-  //    GlobalStyles.addSongUserBoard,
-  //    h3("Add song"),
-  //    div(GlobalStyles.toTheLeft,
-  //      div(
-  //        div(
-  //          div(GlobalStyles.toTheRight, label(GlobalStyles.label, "Song title: ")),
-  //          div(
-  //            input(
-  //              GlobalStyles.inputField,
-  //              placeholder := "Enter song title",
-  //              onInput.mapToValue --> songTitle
-  //            )
-  //          )
-  //        ),
-  //        p("Song title: ",
-  //          text <-- songTitle),
-  ////        value <-- formStateVar.signal.map(t => t.title),
-  ////        onInput.mapToValue --> titleWriter,
-  //      ),
-  //      div(
-  //        inputField("Artist: ", "Enter artist name"),
-  //        value <-- formStateVar.signal.map(_.artist),
-  //        onInput.mapToValue --> artistWriter
-  //      ),
-  //      div(
-  //        inputField("Duration: ", "Enter song duration"),
-  //        value <-- formStateVar.signal.map(_.duration),
-  //        onInput.mapToValue --> durationWriter
-  //      )
-  //    ),
-  //    p(ctaButtonAddSong("Add song", songTitle.signal.now(), formStateVar.now().duration, formStateVar.now().artist))
-  //  )
   val addUserForm = div(
     GlobalStyles.addSongUserBoard,
     h3("Add user"),
-    div(
-      inputField("User name: ", "Enter user's name"),
-      inputField("Age: ", "Enter user's age"),
-      inputField("Favorite song: ", "Enter user's favorite song")
-    ),
-    p( ctaButton("Add user"))
+    div(GlobalStyles.toTheLeft,
+      form(
+        div(
+          div(GlobalStyles.toTheRight, label(GlobalStyles.label, "User name: ")),
+          div(
+            input(
+              GlobalStyles.inputField,
+              placeholder := "Enter user name:",
+              value <-- userNameVar,
+              onInput.mapToValue --> userNameVar
+            )
+          )
+        ),
+        div(
+          div(GlobalStyles.toTheRight, label(GlobalStyles.label, "Age: ")),
+          div(
+            input(
+              GlobalStyles.inputField,
+              placeholder := "Enter user's age",
+              value <-- ageVar,
+              onInput.mapToValue --> ageVar
+            )
+          )
+        ),
+        div(
+          div(GlobalStyles.toTheRight, label(GlobalStyles.label, "Favorite song: ")),
+          div(
+            input(
+              GlobalStyles.inputField,
+              placeholder := "Enter user's favorite song",
+              value <-- favouriteSongVar,
+              onInput.mapToValue --> favouriteSongVar
+            )
+          )
+        )
+      ),
+      p(ctaButtonAddUser("Add user", userNameVar, ageVar, favouriteSongVar))
+    )
   )
+
+
+//  val addUserForm = div(
+//    GlobalStyles.addSongUserBoard,
+//    h3("Add user"),
+//    div(
+//      inputField("User name: ", "Enter user's name"),
+//      inputField("Age: ", "Enter user's age"),
+//      inputField("Favorite song: ", "Enter user's favorite song")
+//    ),
+//    p( ctaButton("Add user"))
+//  )
 
   val addCreateSong = div(
     GlobalStyles.pageContainer,
