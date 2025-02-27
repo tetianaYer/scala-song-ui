@@ -2,3 +2,8 @@
 .bsp
 node_modules
 target
+.bloop
+.metals
+.vscode
+project/project
+project/metals.sbt
