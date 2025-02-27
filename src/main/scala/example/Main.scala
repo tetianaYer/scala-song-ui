@@ -35,17 +35,17 @@ def helloWorld(): Unit =
   val postSongResp = Var("")
 
 
-  def ctaButtonAddSong(text: String, songTitle: String, songDuration: String, artist: String) = button(
+  def ctaButtonAddSong(text: String, songTitle: Var[String], songDuration: String, artist: String) = button(
     GlobalStyles.ctaButton,
     span(
       cls := "button-text",
       text
     ),
     onClick.flatMap { _ =>
-      dom.window.alert(songTitle)
-      println(songTitle)
+      dom.window.alert(songTitle.now())
+      println(songTitle.now())
       val songStub = Song("3.67", "Killer", "Queen")
-      val song = Song("3.67", songTitle, "Queen")
+      val song = Song("3.67", songTitle.now(), "Queen")
       dom.window.alert(s"Song length: ${song.length}")
       val json = upickle.default.write[Song](song)
       dom.window.alert("1")
@@ -94,7 +94,7 @@ def helloWorld(): Unit =
         p("Song title: ", text <-- songVar.signal),
       )
     ),
-    p(ctaButtonAddSong("Add song", songVar.now(), "state.duration", "state.artist"))
+    p(ctaButtonAddSong("Add song", songVar, "state.duration", "state.artist"))
   )
 
   val addCreateSong = div(
