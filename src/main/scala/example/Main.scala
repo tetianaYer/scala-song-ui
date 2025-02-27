@@ -238,8 +238,8 @@ def helloWorld(): Unit =
   )
   val userVar = Var(User)
 
-  case class UserState(userUuid: String, userName: String, age: String, favouriteSongUuid: String)
-  val userStateVar = Var(UserState("", "", "", ""))
+  case class UserState(userName: String, age: String, favouriteSongUuid: String)
+  val userStateVar = Var(UserState("", "", ""))
   //  val titleWriter = formStateVar.updater[String]((currentState, title) => currentState.copy(title = title))
   //  val artistWriter = formStateVar.updater[String]((currentState, artist) => currentState.copy(artist = artist))
   //  val durationWriter = formStateVar.updater[String]((currentState, duration) => currentState.copy(duration = duration))
@@ -293,7 +293,6 @@ def helloWorld(): Unit =
       p(ctaButtonAddUser("Add user", userNameVar, ageVar, favouriteSongVar))
     )
   )
-
 
 //  val addUserForm = div(
 //    GlobalStyles.addSongUserBoard,
