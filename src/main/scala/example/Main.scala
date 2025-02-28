@@ -31,6 +31,18 @@ def helloWorld(): Unit =
 
   given Conversion[StyleA, Mod[HtmlElement]] =
     (styleA: StyleA) => className := styleA.className.value
+  // ENDPOINTS
+  val host = "http://127.0.0.1:8081"
+
+  def sendPostRequest(path: String, json: String): EventStream[String] = {
+    val url = s"$host$path"
+    FetchStream.post(url, _.body(json))
+  }
+
+  def sendGetRequest(path: String): EventStream[String] = {
+    val url = s"$host$path"
+    FetchStream.get(url)
+  }
 
   ///// SONGS LIST STUFF ///
   def songListDatabaseRow(name: String, artist: String, genre: String, duration: String) = div(GlobalStyles.userPadding,
@@ -51,7 +63,7 @@ def helloWorld(): Unit =
   }
 
   val songListDatabase = div(GlobalStyles.songListDatabase,
-    FetchStream.get("http://127.0.0.1:8081/v1/songs") --> { responseText => {
+    sendGetRequest("/v1/songs") --> { responseText => {
       println("Decoding......")
       val response = upickle.default.read[List[Song]](responseText)
       println(response)
@@ -92,7 +104,7 @@ def helloWorld(): Unit =
   }
 
   val userList = div(GlobalStyles.userlist,
-    FetchStream.get("http://127.0.0.1:8081/v1/users") --> { responseText => {
+    sendGetRequest("/v1/users") --> { responseText => {
       println("Decoding......")
       val response = upickle.default.read[List[User]](responseText)
       println(response)
@@ -104,19 +116,6 @@ def helloWorld(): Unit =
       children <-- userElements
     )
   )
-//
-//
-//  def sendPostRequest(songTitle: String, songDuration: String, artist: String): Binder.Base = {
-//    val song = Song(songDuration, songTitle, artist)
-//    println(song)
-//    val json = upickle.default.write[Song](song)
-//    println(json)
-//    FetchStream.post("http://127.0.0.1:8081/v1/songs", _.body(json)) --> { responseText => {
-//      val response: String = upickle.default.read[SongResponse](responseText).text
-//      postSongResp.set(response)
-//    }
-//    }
-//  }
 
   def ctaButton(text: String) = button(
     GlobalStyles.ctaButton,
@@ -137,7 +136,7 @@ def helloWorld(): Unit =
       val addSong = addSongForm.now()
       val song = Song(addSong.duration, addSong.title, addSong.artist)
       val json = upickle.default.write[Song](song)
-      FetchStream.post("http://127.0.0.1:8081/v1/songs", _.body(json))
+      sendPostRequest("/v1/songs", json)
     } --> Observer[String] { responseText =>
       val response: String = upickle.default.read[String](responseText)
       dom.console.log(response)
@@ -163,13 +162,11 @@ def helloWorld(): Unit =
       println(userStateVar.now())
       val user = User(userData.userName, userAge, favSong)
       val json = upickle.default.write[User](user)
-      FetchStream.post("http://127.0.0.1:8081/v1/user", _.body(json))
+      sendPostRequest("/v1/user", json)
     } --> Observer[String] { response =>
       dom.console.log(response)
     }
   )
-
-  def TextInput(): Input = input(typ := "text")
 
   case class AddUserForm(title: String, artist: String, duration: String)
   val addUserFormVar = Var(AddUserForm("", "", ""))
@@ -202,7 +199,6 @@ def helloWorld(): Unit =
       p(ctaButtonAddSong("Add song", addUserFormVar))
     )
   )
-  val userVar = Var(User)
 
   case class UserState(userName: String, age: String, favouriteSongUuid: String)
   val userStateVar = Var(UserState("", "", ""))
