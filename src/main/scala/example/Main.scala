@@ -168,8 +168,15 @@ def helloWorld(): Unit =
       text
     ),
     onClick.flatMap { _ =>
-      val userUuid = UUID.fromString("f6884898-c18d-4ddc-93f7-f691702e6d98").toString
-      val user = User(userUuid, userName.now(), Some(age.now()), Some(favouriteSong.now()))
+      val favSong = favouriteSong.now().length match {
+        case 0 => None
+        case _ => Some(favouriteSong.now())
+      }
+      val userAge = age.now().length match {
+        case 0 => None
+        case _ => Some(age.now())
+      }
+      val user = User(userName.now(), userAge, favSong)
       val json = upickle.default.write[User](user)
       FetchStream.post("http://127.0.0.1:8081/v1/user", _.body(json))
     } --> Observer[String] { response =>
