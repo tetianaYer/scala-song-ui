@@ -4,20 +4,16 @@ import com.raquo.airstream.ownership.Owner
 import com.raquo.airstream.web.FetchOptions
 import com.raquo.laminar.api.L.{*, given}
 import com.raquo.laminar.api.features.unitArrows
-import com.raquo.laminar.receivers.ChildReceiver.text
-import example.models.{Song, SongResponse, User}
+import example.models.{Song, User}
 import example.styles.GlobalStyles
 import org.scalajs.dom
 import org.scalajs.dom.document
 import scalacss.ProdDefaults.*
 import scalacss.StyleA
 import scalacss.internal.mutable.GlobalRegistry
-import org.scalajs.dom
 
-import java.util.UUID
-import scala.scalajs.js
-import scala.scalajs.js.annotation.JSImport
 import scala.language.implicitConversions
+import scala.scalajs.js
 
 
 @main
