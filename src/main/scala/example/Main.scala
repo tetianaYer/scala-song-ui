@@ -28,9 +28,14 @@ def helloWorld(): Unit =
   given Conversion[StyleA, Mod[HtmlElement]] =
     (styleA: StyleA) => className := styleA.className.value
   // ENDPOINTS
-  val host = "http://127.0.0.1:8081"
+  val host = "http://127.0.0.1:8080"
 
   def sendPostRequest(path: String, json: String): EventStream[String] = {
+    val url = s"$host$path"
+    FetchStream.post(url, _.body(json))
+  }
+
+  def sendAddSongRequest(path: String, json: String): EventStream[String] = {
     val url = s"$host$path"
     FetchStream.post(url, _.body(json))
   }
@@ -40,22 +45,52 @@ def helloWorld(): Unit =
     FetchStream.get(url)
   }
 
+  def sendDeleteRequest(path: String, uuid: String): EventStream[String] = {
+    val url = s"$host$path/$uuid"
+    FetchStream.put(url)
+  }
+
   ///// SONGS LIST STUFF ///
-  def songListDatabaseRow(name: String, artist: String, genre: String, duration: String) = div(GlobalStyles.userPadding,
+
+  val songsList = Var(List.empty[Song])
+
+
+  def deleteSong(songUuid: Option[String]) = button(
+    GlobalStyles.delete,
+    span(
+      cls := "button-text",
+      "Delete"
+    ),
+    onClick.flatMap { _ =>
+      songUuid match {
+        case Some(uuid) => sendDeleteRequest("/v1/songs", uuid)
+        case _ => EventStream.fromValue("Cannot delete Song!!!!!")
+      }
+          } --> Observer[String] { responseText =>
+      if (responseText == "\"Song deleted\"") {
+        songsList.update(_.filterNot(_.songUuid == songUuid))
+      }
+      println(responseText)
+      }
+  )
+
+
+  def songListDatabaseRow(song: Song, genre: String ) = div(GlobalStyles.userPadding,
     table(GlobalStyles.userRow, GlobalStyles.userPadding,
       tbody(
         tr(
-          td(p(s"$name"), GlobalStyles.songTableTextStyle, GlobalStyles.toTheLeft, widthAttr := 150),
-          td(p(s"$artist"), GlobalStyles.songTableTextStyle, GlobalStyles.toTheLeft,  widthAttr := 100),
+          td(p(s"${song.title}"), GlobalStyles.songTableTextStyle, GlobalStyles.toTheLeft, widthAttr := 150),
+          td(p(s"${song.artist}"), GlobalStyles.songTableTextStyle, GlobalStyles.toTheLeft,  widthAttr := 100),
           td(p(s"$genre"), GlobalStyles.songTableTextStyle, GlobalStyles.toTheLeft,  widthAttr := 50),
-          td(p(s"$duration"), GlobalStyles.songTableTextStyle, GlobalStyles.toTheLeft,  widthAttr := 50),
+          td(p(s"${song.length}"), GlobalStyles.songTableTextStyle, GlobalStyles.toTheLeft,  widthAttr := 50),
+          td(p(deleteSong(song.songUuid)), GlobalStyles.songTableTextStyle, GlobalStyles.toTheLeft,  widthAttr := 50),
         )
       )
     )
   )
-  val songsList = Var(List.empty[Song])
+
   val songsElements = songsList.signal.map { songs =>
-    songs.map(song => div(songListDatabaseRow(song.title, song.artist, "rock", song.length.toString)))
+    songs.map(song => div(songListDatabaseRow(song, "rock")))
   }
 
   val songListDatabase = div(GlobalStyles.songListDatabase,
@@ -80,6 +115,7 @@ def helloWorld(): Unit =
     ),
     onClick --> println("DELETE!!")
   )
+
 
   def userTable(name: String) = div(GlobalStyles.userPadding,
     table( GlobalStyles.userRow, GlobalStyles.userPadding,
@@ -130,12 +166,13 @@ def helloWorld(): Unit =
     ),
     onClick.flatMap { _ =>
       val addSong = addSongForm.now()
-      val song = Song(addSong.duration, addSong.title, addSong.artist)
+      val song = Song(length= addSong.duration, title = addSong.title, artist = addSong.artist)
       val json = upickle.default.write[Song](song)
       sendPostRequest("/v1/songs", json)
     } --> Observer[String] { responseText =>
-      val response: String = upickle.default.read[String](responseText)
-      dom.console.log(response)
+      dom.console.log(responseText)
+      val response: Song = upickle.default.read[Song](responseText)
+      songsList.update(_ :+ response)
     }
   )
 
@@ -161,6 +198,8 @@ def helloWorld(): Unit =
       sendPostRequest("/v1/user", json)
     } --> Observer[String] { response =>
       dom.console.log(response)
+      val user: User = upickle.default.read[User](response)
+      usersList.update(_ :+ user)
     }
   )
 
