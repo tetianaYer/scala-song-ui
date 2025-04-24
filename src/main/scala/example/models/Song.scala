@@ -2,7 +2,7 @@ package example.models
 
 import upickle.default.{macroRW, ReadWriter as RW}
 
-case class Song(length: String, title: String, artist: String)
+case class Song(songUuid: Option[String] = None, length: String, title: String, artist: String)
 
 object Song:
   given RW[Song] = macroRW
