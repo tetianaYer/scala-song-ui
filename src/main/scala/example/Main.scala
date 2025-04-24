@@ -4,6 +4,7 @@ import com.raquo.airstream.ownership.Owner
 import com.raquo.airstream.web.FetchOptions
 import com.raquo.laminar.api.L.{*, given}
 import com.raquo.laminar.api.features.unitArrows
+import com.raquo.laminar.nodes.DetachedRoot
 import example.models.{Song, User}
 import example.styles.GlobalStyles
 import org.scalajs.dom
@@ -56,10 +57,10 @@ def helloWorld(): Unit =
 
 
   def deleteSong(songUuid: Option[String]) = button(
-    GlobalStyles.delete,
+    GlobalStyles.deleteIcon,
     span(
       cls := "button-text",
-      "Delete"
+      "x"
     ),
     onClick.flatMap { _ =>
       songUuid match {
@@ -67,7 +68,7 @@ def helloWorld(): Unit =
         case _ => EventStream.fromValue("Cannot delete Song!!!!!")
       }
           } --> Observer[String] { responseText =>
-      if (responseText == "\"Song deleted\"") {
+      if (responseText == "Song deleted") {
         songsList.update(_.filterNot(_.songUuid == songUuid))
       }
       println(responseText)
@@ -107,6 +108,23 @@ def helloWorld(): Unit =
     )
   )
 
+  val isModalVisible = Var(false)
+
+  def customModal(content: HtmlElement): HtmlElement = {
+    div(
+      GlobalStyles.userInfo,
+      display <-- isModalVisible.signal.map(if (_) "block" else "none"),
+      div(
+        cls := "modal-content",
+        content,
+        button(
+          "Close",
+          onClick --> (_ => isModalVisible.set(false))
+        )
+      )
+    )
+  }
+
   def deleteUser() = button(
     GlobalStyles.delete,
     span(
@@ -114,6 +132,15 @@ def helloWorld(): Unit =
       "Delete user"
     ),
     onClick --> println("DELETE!!")
+  )
+
+  val userDetails = div(
+    GlobalStyles.userInfo,
+    h3("User details"),
+    div(GlobalStyles.toTheLeft,
+      p("User name: ", "Blala"),
+      p(deleteUser()),
+    )
   )
 
 
@@ -124,7 +151,8 @@ def helloWorld(): Unit =
           td(p(s"$name"), GlobalStyles.userTableTextStyle, GlobalStyles.toTheLeft),
           td(GlobalStyles.toTheRight, GlobalStyles.columnWidth,
             deleteUser()
-          )
+          ),
+          onClick --> (_ => isModalVisible.set(true))
         )
       )
     )
@@ -254,8 +282,11 @@ def helloWorld(): Unit =
     )
   )
 
-  val addCreateSong = div(
+  val mainPage = div(
+    GlobalStyles.topPanel,
+    div(
     GlobalStyles.pageContainer,
+      songListDatabase,
     div(GlobalStyles.topPanel,
       div(
         GlobalStyles.pageContainer,addSongForm),
@@ -263,7 +294,10 @@ def helloWorld(): Unit =
         GlobalStyles.pageContainer,addUserForm)
     ),
     userList,
-    songListDatabase
+      customModal(
+          userDetails
+      )
+    )
   )
 
 
@@ -273,7 +307,7 @@ def helloWorld(): Unit =
       div(
         GlobalStyles.topPanel,
         idAttr := "app-container",songListDatabase,
-        addCreateSong)
+        mainPage)
     )
 
 
