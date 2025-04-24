@@ -21,7 +21,7 @@ object GlobalStyles extends StyleSheet.Inline {
     display.flex,
     flexDirection.column,
     padding(1.em, 1.em),
-    width(100%%),
+    width(95%%),
     justifyContent.center,
   )
 
@@ -29,6 +29,7 @@ object GlobalStyles extends StyleSheet.Inline {
     backgroundColor.beige,
     display.flex,
     flexDirection.row,
+    width(95%%),
     padding(1.rem, 1.em),
     borderColor.black,
     borderRadius(1.em)
@@ -100,6 +101,16 @@ object GlobalStyles extends StyleSheet.Inline {
     borderRadius(1.em),
   )
 
+  val deleteIcon: StyleA = style("deleteIcon")(
+    color.black,
+    backgroundColor.red,
+    fontSize(20 px),
+    fontStyle.normal,
+    fontWeight.bold,
+    padding(0.5.rem, 0.8.rem),
+    borderRadius(2.em),
+  )
+
   val inputField: StyleA = style("input-field")(
     color.black,
     fontSize(18 px),
@@ -110,6 +121,16 @@ object GlobalStyles extends StyleSheet.Inline {
   val addSongUserBoard: StyleA = style("addSongUserBoardg")(
     color.black,
     backgroundColor.lightyellow,
+    fontSize(18 px),
+    borderColor.black,
+    width(100%%),
+    justifyContent.center,
+    borderRadius(1.em),
+  )
+
+  val userInfo: StyleA = style("userInfo")(
+    color.black,
+    backgroundColor.lightgreen,
     fontSize(18 px),
     borderColor.black,
     width(100%%),
