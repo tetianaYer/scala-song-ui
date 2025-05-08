@@ -111,6 +111,16 @@ object GlobalStyles extends StyleSheet.Inline {
     borderRadius(2.em),
   )
 
+  val close: StyleA = style("close")(
+    color.black,
+    backgroundColor.lightgray,
+    fontSize(20 px),
+    fontStyle.normal,
+    fontWeight.bold,
+    padding(0.5.rem, 0.8.rem),
+    borderRadius(2.em),
+  )
+
   val inputField: StyleA = style("input-field")(
     color.black,
     fontSize(18 px),
