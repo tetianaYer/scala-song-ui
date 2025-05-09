@@ -8,7 +8,7 @@ import com.raquo.laminar.nodes.DetachedRoot
 import example.models.{Song, User}
 import example.styles.GlobalStyles
 import org.scalajs.dom
-import org.scalajs.dom.document
+import org.scalajs.dom.{console, css, document}
 import scalacss.ProdDefaults.*
 import scalacss.StyleA
 import scalacss.internal.mutable.GlobalRegistry
@@ -110,57 +110,95 @@ def helloWorld(): Unit =
 
   val isModalVisible = Var(false)
 
-  def customModal(content: HtmlElement): HtmlElement = {
+  val usersList = Var(List.empty[User])
+  val currentUser = Var(User(None, "", None, None))
+  val userUuidVar = currentUser.zoom(_.userUuid)((state, newUuid) => state.copy(userUuid = newUuid))
+  val usersNameVar = currentUser.zoom(_.userName)((state, newName) => state.copy(userName = newName))
+  val userAgeVar = currentUser.zoom(_.age)((state, newAge) => state.copy(age = newAge))
+  val favSongVar = currentUser.zoom(_.favouriteSongUuid)((state, newFavSong) => state.copy(favouriteSongUuid = newFavSong))
+
+
+  def deleteUser(uuid: Option[String]) = button(
+    GlobalStyles.delete,
+    span(
+      cls := "button-text",
+      "Delete user"
+    ),
+    onClick.flatMap { _ =>
+      uuid match {
+        case Some(uuid) => sendDeleteRequest("/v1/user/", uuid)
+        case _ => EventStream.fromValue("Cannot find User!!!!!")
+      }
+    } --> Observer[String] { responseText =>
+      if (responseText == "User deleted") {
+        usersList.update(users => users.filterNot(user => user.userUuid == uuid))
+      }
+      println(responseText)
+    }
+  )
+
+
+  def userDetails = currentUser.signal.map { user =>
+    div(
+      GlobalStyles.userInfo,
+      h3("User details"),
+      div(GlobalStyles.toTheLeft,
+        p("User name: ", user.userName),
+        p("Age: ", user.age),
+        p(deleteUser(user.userUuid)),
+      )
+    )
+  }
+
+  val customModal: HtmlElement = {
     div(
       GlobalStyles.userInfo,
       display <-- isModalVisible.signal.map(if (_) "block" else "none"),
       div(
         cls := "modal-content",
-        content,
+        div(
+          child <-- userDetails,
+        ),
         button(
-          "Close",
+          GlobalStyles.close,
+          span(
+            cls := "button-text",
+            "Close"
+          ),
           onClick --> (_ => isModalVisible.set(false))
         )
       )
     )
   }
 
-  def deleteUser() = button(
-    GlobalStyles.delete,
-    span(
-      cls := "button-text",
-      "Delete user"
-    ),
-    onClick --> println("DELETE!!")
-  )
-
-  val userDetails = div(
-    GlobalStyles.userInfo,
-    h3("User details"),
-    div(GlobalStyles.toTheLeft,
-      p("User name: ", "Blala"),
-      p(deleteUser()),
-    )
-  )
-
-
-  def userTable(name: String) = div(GlobalStyles.userPadding,
+  def userTable(user: User) = div(GlobalStyles.userPadding,
     table( GlobalStyles.userRow, GlobalStyles.userPadding,
       tbody(
         tr( GlobalStyles.userRow,
-          td(p(s"$name"), GlobalStyles.userTableTextStyle, GlobalStyles.toTheLeft),
+          td(p(s"${user.userName}"), GlobalStyles.userTableTextStyle, GlobalStyles.toTheLeft),
           td(GlobalStyles.toTheRight, GlobalStyles.columnWidth,
-            deleteUser()
+            deleteUser(user.userUuid)
           ),
-          onClick --> (_ => isModalVisible.set(true))
+          onClick --> { _ =>
+            userUuidVar.set(user.userUuid)
+            usersNameVar.set(user.userName)
+            userAgeVar.set(user.age)
+            favSongVar.set(user.favouriteSongUuid)
+            val userState = currentUser.now()
+            val tempUser = User(userState.userUuid,
+              userState.userName,
+              userState.age,
+              userState.favouriteSongUuid
+            )
+            isModalVisible.set(true)
+          }
         )
       )
     )
   )
 
-  val usersList = Var(List.empty[User])
   val userElements = usersList.signal.map { users =>
-    users.map(user => div(userTable(user.userName)))
+    users.map(user => div(userTable(user)))
   }
 
   val userList = div(GlobalStyles.userlist,
@@ -221,7 +259,7 @@ def helloWorld(): Unit =
         case _ => Some(userData.age)
       }
       println(userStateVar.now())
-      val user = User(userData.userName, userAge, favSong)
+      val user = User(userName = userData.userName, age = userAge, favouriteSongUuid = favSong)
       val json = upickle.default.write[User](user)
       sendPostRequest("/v1/user", json)
     } --> Observer[String] { response =>
@@ -294,9 +332,7 @@ def helloWorld(): Unit =
         GlobalStyles.pageContainer,addUserForm)
     ),
     userList,
-      customModal(
-          userDetails
-      )
+      customModal
     )
   )
 
